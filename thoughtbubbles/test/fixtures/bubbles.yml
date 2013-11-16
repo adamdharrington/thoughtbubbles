@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  bubble_name: MyString
+  thought: MyText
+  link: MyString
+
+two:
+  bubble_name: MyString
+  thought: MyText
+  link: MyString

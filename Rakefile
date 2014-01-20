@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-Thoughtbubbles::Application.load_tasks
+ThoughtBubbles::Application.load_tasks

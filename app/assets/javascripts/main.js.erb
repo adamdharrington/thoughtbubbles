@@ -1,0 +1,240 @@
+/*=======================================================================
+		Vals Global Namespace
+========================================================================*/
+var Vals = {
+	isurl: function (str) {
+		var urlExp = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
+		return urlExp.test(str);
+	},
+	ispresent: function(str) {
+		var emailExp = /[\w]+/
+		return emailExp.test(str);
+	},
+	isshort: function(str) {
+		var lengthExp = 350;
+		return lengthExp >= str.length;
+	},
+	isemail: function(str) {
+		var emailExp = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/
+		return emailExp.test(str);
+	},
+	validate : function(){
+		var email = $('input#thought_email').val(),
+			url = $('input#thought_url').val(),
+			thought = $('textarea#thought_thought').val();
+		return (Vals.isemail(email) && 
+				Vals.ispresent(email) && 
+				Vals.ispresent(thought) && 
+				Vals.isshort(thought) && 
+				( url == "" || Vals.isurl(url) ) )
+	}
+};
+/*=======================================================================
+		Bubs Global Namespace
+========================================================================*/
+var Bubs = {
+	bubbleData : {},
+
+	randomBubbles : function(){
+	/* Add random starting points for all bubbles */	
+		var rand = function(range){
+			return Math.floor((Math.random() * range) + 1)
+		}
+		$('.bubble').each(function(){
+		  $(this).css({
+			top  : "" + rand(300) + "px",
+			left : "" + rand(750) + "px",
+			"animation-name": "float" + rand(3),
+		})});
+	},
+	eventHandlers : {
+		newBubbleForm : function(){
+			/* hover functionality */	
+			$('#newbub').hover(function(){
+				// mouse on
+				$(this).stop().animate({
+					right: "-10px",
+					top: "-10px",
+					"background-color": "rgba(255,255,255, 0.9)"
+				}, 500);
+				$('#newbub > form').fadeIn(500);
+			}, function(){
+				/* mouse off */
+				$(this).stop().animate({
+					right: "-200px",
+					top:   "-200px",
+					"background-color": "rgba(255,255,255, 0.2)"
+				}, 500);
+				$('#newbub > form').fadeOut(500);
+			});
+		},
+		/* Bubble click functions */
+		bubbleClicks : function(){
+			$('.bubble').on('click', function(e){
+				var bubble = $(this)
+					reference = bubble.attr("data-ref"),
+					thought = Bubs.bubbleData[reference];
+				bubble.toggleClass('selectedbubble');
+				$('#overlay').fadeToggle();
+				
+				if (bubble.html() == "" ){
+					setTimeout(function(){
+						bubble.append(Bubs.innerContent(thought));
+					}, 1200);
+				} else {
+					bubble.empty();
+				};
+			});
+		},
+		formInput : function(){
+			$('input#thought_email').on('blur', function(){
+				var s = $(this).val()
+				if (Vals.isemail(s)){
+					$(this).removeClass("invalid");
+					$(this).addClass("valid");
+				}else{
+					$(this).removeClass("valid");
+					$(this).addClass("invalid");
+				}
+			});
+			$('input#thought_url').on('blur', function(){
+				var s = $(this).val()
+				if ( s == "" || Vals.isurl(s) ){
+					$(this).removeClass("invalid");
+					$(this).addClass("valid");
+				}else{
+					$(this).removeClass("valid");
+					$(this).addClass("invalid");
+				}
+			});
+			$('textarea#thought_thought').on('blur', function(){
+				var s = $(this).val()
+				if (Vals.ispresent(s) && Vals.isshort(s)){
+					$(this).removeClass("invalid");
+					$(this).addClass("valid");
+				}else{
+					$(this).removeClass("valid");
+					$(this).addClass("invalid");
+				}
+			});
+		},
+		formSubmit : function(){
+			
+			$("form").on("submit", function(e){
+				e.preventDefault();
+				if (Vals.validate()){
+					Bubs.formAjax()
+				} else {
+					Bubs.newResponse("", "fail", "","");
+				}
+			});
+		},
+		/* add new bubbles refresh functions */
+		refreshBubbles : function(){
+			$('a#newlink').on('click', function(e){
+				e.preventDefault();
+				var url = "/refresh";
+				Bubs.getBubbles(url);
+			});
+		},
+		addAll: function(){
+			Bubs.eventHandlers.refreshBubbles();
+			Bubs.eventHandlers.newBubbleForm();
+			Bubs.eventHandlers.formInput();
+			Bubs.eventHandlers.formSubmit();
+		}
+	},
+	innerContent : function(bubble){
+		var html = "<div class='inner-content'>",
+			content = function(title, attribute){
+				if (bubble[attribute]){
+					return "<div class='flex'><div class='title'>"+ 
+						title +": </div><div class='content'>"+
+						bubble[attribute] +"</div></div>"
+				}
+			},
+			link = "<div class='bubble-link'>"+
+					"<a href='"+ bubble.url +"' title='Follow link in new tab' target='_new'>"+
+					"<img src='/assets/link-icon.png' >"+
+					"</a></div>";
+		if (bubble.image.image.big.url){
+			html += "<div class='bubble-img'><a class='fancybox' href='"+ 
+					bubble.image.image.big.url +"'>"+
+					"<img src='" + bubble.image.image.medium.url + "' >"+
+					"</a></div>"
+		}
+		html += content("Thought", "thought" ) || "";
+		if (bubble.url) {
+			html += link
+		};
+		html +=	"</div>";
+		return html;		
+	},
+	/* place bubbles on screen */
+	placeBubble : function(thought){
+		$( "<div/>", {
+			"class" : "bubble",
+			"href": "#bubble" + thought.id,
+			"data-ref": thought.id
+		  }).appendTo( "#floatspace" );
+	},
+	
+	getBubbles : function(url){
+		$(".bubble").css({width:0,height:0})
+					.delay(800)
+					.queue(function() {
+						this.remove();
+					});
+		$.getJSON( url, function( data ) {
+			Bubs.bubbleData = {};
+			$.each( data, function() {
+				Bubs.placeBubble(this);
+				Bubs.bubbleData[this.id] = this;
+			});
+			Bubs.randomBubbles();
+			Bubs.eventHandlers.bubbleClicks();
+		});
+		
+	},
+	
+	formAjax : function(e){
+		$('#newbub > form').fadeOut(500);
+		//$("#loading").show();
+		var f = $('#newbub form'),
+			url = f.attr("action");
+		
+		var options = {
+			url: url,
+			resetForm: true,
+			error: Bubs.newResponse,
+			success: Bubs.newResponse
+		};
+		f.ajaxSubmit(options);
+	},
+	newResponse : function(responseText, statusText, xhr, $form){
+		//$("#loading").hide();
+		var notice = "";
+		statusText == "success" ? notice = "Your thought was successfully saved." : notice = "There was an error in your request";
+		$('#notices').html(notice)
+			.fadeIn(500)
+			.delay(2000)
+			.fadeOut(200);
+	}
+};
+
+$(function(){
+/*=======================================================================
+		Initialise Scripts
+========================================================================*/
+
+	Bubs.eventHandlers.addAll();
+	$('.fancybox').fancybox();
+	
+	<% if @thisthought %>
+	Bubs.bubbleData[<%= @thisthought.id %>] = <% @thisthought.to_json %>;
+	alert("readir");
+	Bubs.bubbleData.each(function(){placeBubble(this)});
+	<% else %>
+	$('a#newlink').trigger('click');
+	<% end %>
+});

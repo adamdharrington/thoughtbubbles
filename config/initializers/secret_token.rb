@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Thoughtbubbles::Application.config.secret_token = 'f98223b99a713bbf63cde90953d044ff584cd7e60a87c7f79ee6f16a6a2be23d8e91fe6b58ee125915fb4262e8337f7c8e093c593004b559c50ee77e904e333d'
+ThoughtBubbles::Application.config.secret_token = '650a2e445c0728d193911aff2161b728882306117f66dd9a031c5da8c6d2a2d397e1377f86c6bdd1085b381015b5a0af49e72928ae9cf429f0f52841f9a54a13'

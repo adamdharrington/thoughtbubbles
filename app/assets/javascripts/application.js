@@ -11,6 +11,9 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
-//= require jquery-ui.min
 //= require jquery_ujs
+//= require jquery.form.min
+//= require jquery.fancybox
+//= require prefixfree.min
+//= require prefixfree.dynamic-dom.min
 //= require_tree .

@@ -1,12 +1,7 @@
-Thoughtbubbles::Application.routes.draw do
-  resources :bubbles
-
-  get "frontend/index"
-
-  get "frontend/about"
-
-  devise_for :users
-
+ThoughtBubbles::Application.routes.draw do
+  resources :thoughts
+  match 'thoughts/:id' => 'thoughts#index'
+  match '/refresh' => 'thoughts#refresh'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -56,7 +51,7 @@ Thoughtbubbles::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'frontend#index'
+  root :to => 'thoughts#index'
 
   # See how all your routes lay out with "rake routes"
 

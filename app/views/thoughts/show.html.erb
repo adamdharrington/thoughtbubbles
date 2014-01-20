@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Email:</b>
+  <%= @thought.email %>
+</p>
+
+<p>
+  <b>Url:</b>
+  <%= @thought.url %>
+</p>
+
+<p>
+  <b>Thought:</b>
+  <%= @thought.thought %>
+</p>
+
+<p>
+  <b>Sharecount:</b>
+  <%= @thought.sharecount %>
+</p>
+
+
+<%= link_to 'Edit', edit_thought_path(@thought) %> |
+<%= link_to 'Back', thoughts_path %>

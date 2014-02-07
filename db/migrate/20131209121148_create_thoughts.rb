@@ -5,7 +5,7 @@ class CreateThoughts < ActiveRecord::Migration
       t.string :url
       t.text :thought
       t.integer :sharecount
-
+	  t.string :image
       t.timestamps
     end
   end

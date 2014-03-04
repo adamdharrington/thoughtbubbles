@@ -5,7 +5,7 @@ class Thought < ActiveRecord::Base
 def self.get_random(int)
 	@int = int
 	@max = self.all.count
-	@min = 1
+	@min = 2
 	@thoughts = []
 	@int.times {|i|	
 		begin

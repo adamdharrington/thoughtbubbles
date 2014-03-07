@@ -2,13 +2,13 @@ body{
 	overflow:hidden;
 	height:100%;
 	color:#fff;
+	background:url('/assets/bg.png') repeat #0a0a0a;
 }
 #bubble-wrap{
 	position:absolute;
 	top:0;bottom:0;left:0;right:0;
 	margin:0;padding:0;
 	overflow:hidden;
-	background:url('/assets/bg.png') repeat #0a0a0a;
 }
 #bubble-wrap #floatspace{
 	position:relative;

@@ -41,11 +41,12 @@ var Bubs = {
 			return Math.floor((Math.random() * range) + 1)
 		}
 		$('.bubble').each(function(){
+		  var animation = PrefixFree.prefixProperty("animation-name");
 		  $(this).css({
 			top  : "" + rand(300) + "px",
-			left : "" + rand(750) + "px",
-			"animation-name": "float" + rand(3),
-		})});
+			left : "" + rand(750) + "px"
+		  }).addClass("bub"+rand(3));
+		});
 	},
 	eventHandlers : {
 		newBubbleForm : function(){

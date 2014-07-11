@@ -38,12 +38,6 @@ body{
 	display:none;
  }
  #bubble-wrap #floatspace .bubble{
-	/*animation-name*/
-	-webkit-animation-name:float;
-	   -moz-animation-name:float;
-		-ms-animation-name:float;
-		 -o-animation-name:float;
-			animation-name:float;
 	/*animation-duration*/
 	-webkit-animation-duration:40s;
 	   -moz-animation-duration:40s;
@@ -92,7 +86,16 @@ body{
 	top: 0 !important;
 	left: 0 !important;
 	z-index: 300 !important;
- } 
+ }
+ #floatspace .bub1{
+   animation-name:float1;
+ }
+ #floatspace .bub2{
+   animation-name:float2;
+ }
+ #floatspace .bub3{
+   animation-name:float3;
+ }
  .inner-content {
 	position: relative;
 	width: 75%;

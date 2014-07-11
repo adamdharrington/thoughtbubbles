@@ -5,10 +5,10 @@
 #   git config --global core.excludesfile ~/.gitignore_global
 
 # Ignore bundler config
-#/.bundle
+/.bundle
 
 # Allow the default SQLite database.
-#/db/*.sqlite3
+/db/*.sqlite3
 
 # Ignore any temp files
 *~
@@ -16,3 +16,9 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+# Ignore Gemfile.lock
+*.lock
+
+# Ignore Aptana files
+.project
